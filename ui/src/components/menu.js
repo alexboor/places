@@ -7,16 +7,14 @@ const items = [
         key: "home",
     },
     {
-        label: "Profile",
-        key: "profile",
+        label: "Popular",
+        key: "popular",
     }
 ]
 
-const MenuComponent = () => {
+export const MenuComponent = () => {
 
     return (
         <Menu theme="dark" mode="horizontal" items={items} />
     )
 }
-
-export default MenuComponent;

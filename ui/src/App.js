@@ -1,8 +1,8 @@
 import {RouterProvider} from "react-router-dom"
-import { Layout, Avatar, Flex, } from "antd";
-import { UserOutlined } from "@ant-design/icons";
-import MenuComponent from "./components/menu";
-import { router } from "./routes"
+import { Layout, Flex, } from "antd";
+import { MenuComponent } from "./components/menu";
+import { router } from "./routes";
+import { MenuUserButton } from "./components/menu_user_buttons"
 import './App.css';
 
 const { Header, Content, Footer } = Layout;
@@ -10,13 +10,13 @@ const { Header, Content, Footer } = Layout;
 const App = () => {
   return (
     <div className="App">
-      <Layout className="layout">
+      <Layout className="layout" style={styles.layout}>
             <Header style={styles.header}>
-                <h2 style={styles.logo}>Places</h2>  
+                <a href="/"><h2 style={styles.logo}>Places</h2></a>
                 <Flex justify="space-between" align="center" style={{width: "100%"}}>
                     <MenuComponent />
-                    <Avatar style={styles.avatar} icon={<UserOutlined />}/>
                 </Flex>
+                <MenuUserButton />
             </Header>
 
             <Content style={{ padding: '0 50px' }}>
@@ -31,6 +31,9 @@ const App = () => {
 }
 
 const styles = {
+  layout: {
+    height: "100%",
+  },
   header: {
       display: "flex", 
       alignItems: "center", 
@@ -38,12 +41,8 @@ const styles = {
   },
   logo: {
       color: "#eee",
-      margin: "0 20px 0 0"
+      margin: "0 20px 7px 0"
   },
-  avatar: {
-      backgroundColor: "#b0aeae", 
-      flex: "center"
-  }
 }
 
 export default App;
