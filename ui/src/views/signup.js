@@ -48,15 +48,17 @@ const styles = {
         
     },
     h: {
-        margin: "0 0 30px 0",
+        margin: "20px 0 70px 0",
+        fontSize: "25pt",
+        color: "#0f4085"
     },
     left: {
-        minHeight: "100px",
+        minHeight: "560px",
         background: "#1677ff",
         borderRadius: "10px 0 0 10px",
         padding: "50px 20px",
-        background: "#fff url(login.png) no-repeat center center",
-        backgroundSize: "80%"
+        background: "#fff url(sign-up.png) no-repeat center center",
+        backgroundSize: "contain"
     },
     right: {
         minHeight: "100px",
