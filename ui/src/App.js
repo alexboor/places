@@ -1,13 +1,36 @@
-import {RouterProvider} from "react-router-dom"
+import {createBrowserRouter, RouterProvider} from "react-router-dom"
 import { Layout, Flex, } from "antd";
 import { MenuComponent } from "./components/menu";
-import { router } from "./routes";
 import { MenuUserButton } from "./components/menu_user_buttons"
 import './App.css';
+import {useMemo, useState} from "react";
+import IndexView from "./views";
+import SigninView from "./views/signin";
+import SignupView from "./views/signup";
 
 const { Header, Content, Footer } = Layout;
 
 const App = () => {
+    const [token, setToken] = useState(() => localStorage.getItem("token"));
+
+    const router = useMemo(() => {
+        return createBrowserRouter([
+            {
+                path: "/",
+                element: <IndexView />,
+            },
+            {
+                path: "/signin",
+                element: <SigninView token={token} setToken={setToken} />,
+            },
+            {
+                path: "/signup",
+                element: <SignupView token={token} />,
+            }
+        ]);
+    }, [token, setToken])
+
+
   return (
     <div className="App">
       <Layout className="layout" style={styles.layout}>
@@ -16,11 +39,11 @@ const App = () => {
                 <Flex justify="space-between" align="center" style={{width: "100%"}}>
                     <MenuComponent />
                 </Flex>
-                <MenuUserButton />
+                <MenuUserButton token={token} setToken={setToken} />
             </Header>
 
             <Content style={{ padding: '0 50px' }}>
-                <RouterProvider router={router} />
+                <RouterProvider router={router} token={token} setToken={setToken} />
             </Content>
 
             <Footer style={{textAlign: "center"}}>
