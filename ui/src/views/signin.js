@@ -11,7 +11,7 @@ const SigninView = () => {
                     </Col>
 
                     <Col span={14} style={styles.right}>
-                        <h1 style={styles.h}>Create Account</h1>
+                        <h1 style={styles.h}>Sign In</h1>
 
                         <Form name="login">
                             <Form.Item name="email" rules={[{ required: true, message: "Input your email" }]}>
@@ -48,7 +48,6 @@ const styles = {
     },
     left: {
         minHeight: "560px",
-        background: "#1677ff",
         borderRadius: "10px 0 0 10px",
         padding: "50px 20px",
         background: "#fff url(login.png) no-repeat center center",
