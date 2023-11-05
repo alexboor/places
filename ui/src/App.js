@@ -10,8 +10,18 @@ import SignupView from "./views/signup";
 
 const { Header, Content, Footer } = Layout;
 
+const parseToken = (t) => {
+    let base64Url = t.split('.')[1];
+    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    let jsonPayload = decodeURIComponent(window.atob(base64).split('').map( (c) =>
+        ('%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))).join(''));
+
+    return JSON.parse(jsonPayload);
+}
+
 const App = () => {
     const [token, setToken] = useState(() => localStorage.getItem("token"));
+    const [userEmail, setUserEmail] = useState(() => parseToken(token)["sub"])
 
     const router = useMemo(() => {
         return createBrowserRouter([
@@ -39,11 +49,11 @@ const App = () => {
                 <Flex justify="space-between" align="center" style={{width: "100%"}}>
                     <MenuComponent />
                 </Flex>
-                <MenuUserButton token={token} setToken={setToken} />
+                <MenuUserButton token={token} userEmail={userEmail} />
             </Header>
 
             <Content style={{ padding: '0 50px' }}>
-                <RouterProvider router={router} token={token} setToken={setToken} />
+                <RouterProvider router={router} />
             </Content>
 
             <Footer style={{textAlign: "center"}}>
