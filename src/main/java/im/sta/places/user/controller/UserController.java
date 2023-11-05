@@ -28,6 +28,7 @@ public class UserController {
         userService.updateUser(id, userDto, userDto.getPassword());
     }
 
+//    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/auth/register")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto postUser(@Valid @RequestBody UserDto userDto) throws NoSuchAlgorithmException {
