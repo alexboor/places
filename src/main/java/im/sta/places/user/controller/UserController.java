@@ -28,7 +28,7 @@ public class UserController {
         userService.updateUser(id, userDto, userDto.getPassword());
     }
 
-    @PostMapping("/register")
+    @PostMapping("/auth/register")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto postUser(@Valid @RequestBody UserDto userDto) throws NoSuchAlgorithmException {
         return userService.createUser(userDto, userDto.getPassword());

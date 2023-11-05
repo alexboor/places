@@ -22,7 +22,7 @@ public class AuthenticateController {
     private final JwtUtil jwtTokenUtil;
     private final ApplicationUserDetailsService userDetailsService;
 
-    @RequestMapping(value = "/authenticate")
+    @RequestMapping(value = "/auth/signin")
     @ResponseStatus(HttpStatus.CREATED)
     public AuthenticationResponse authenticate(@RequestBody AuthenticationRequest req) throws Exception {
         UserEntity user;
