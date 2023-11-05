@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import {Row, Col, Button, Form, Input, notification} from "antd";
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
@@ -9,6 +9,10 @@ const SigninView = (props) => {
     const [api, contextHolder] = notification.useNotification()
     const [isLoading, setLoading] = useState(false)
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!!props.token) navigate("/")
+    })
 
     const openNotification = (type, t = "", d) => {
         if (t.length === 0) t = "General error";

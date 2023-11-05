@@ -1,13 +1,20 @@
 import { Row, Col, Button, Form, Input, notification, Result } from "antd";
 import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import { useNavigate } from "react-router-dom";
 import axios  from 'axios';
 
 const SignupView = (props) => {
     const [form] = Form.useForm()
+    const navigate = useNavigate()
     const [api, contextHolder] = notification.useNotification()
     const [isLoading, setLoading] = useState(false)
     const [isSentOk, setSent] = useState(false)
+
+
+    useEffect(() => {
+        if (!!props.token) navigate("/")
+    })
 
     const openNotification = (type, t, d) => {
         if (t.length === 0) t = "General error";
