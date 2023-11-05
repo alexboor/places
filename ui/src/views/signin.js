@@ -41,8 +41,7 @@ const SigninView = (props) => {
             .then((resp) => {
                 console.log(resp)
                 if (resp.status === 201) {
-                    localStorage.setItem("token", resp.data.token)
-                    navigate("/")
+                    props.signin(resp.data.token)
                 }
 
             })

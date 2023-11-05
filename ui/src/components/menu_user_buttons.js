@@ -18,7 +18,10 @@ export const MenuUserButton = (props) => {
         {
             keu: "logout",
             label: (
-                <a href="/logout">Logout</a>
+                <a href="#" onClick={(e) => {
+                    e.preventDefault()
+                    props.logout()
+               }}>Logout</a>
             )
         }
     ]

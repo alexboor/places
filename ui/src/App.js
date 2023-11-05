@@ -11,6 +11,8 @@ import SignupView from "./views/signup";
 const { Header, Content, Footer } = Layout;
 
 const parseToken = (t) => {
+    if (!t) return '';
+
     let base64Url = t.split('.')[1];
     let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     let jsonPayload = decodeURIComponent(window.atob(base64).split('').map( (c) =>
@@ -19,9 +21,22 @@ const parseToken = (t) => {
     return JSON.parse(jsonPayload);
 }
 
+
+
 const App = () => {
     const [token, setToken] = useState(() => localStorage.getItem("token"));
     const [userEmail, setUserEmail] = useState(() => parseToken(token)["sub"])
+
+    const signin = (t) => {
+        localStorage.setItem("token", t)
+        setToken(t)
+        document.location.assign("/")
+    }
+
+    const logout = () => {
+        localStorage.removeItem("token")
+        document.location.assign("/signin")
+    }
 
     const router = useMemo(() => {
         return createBrowserRouter([
@@ -31,7 +46,7 @@ const App = () => {
             },
             {
                 path: "/signin",
-                element: <SigninView token={token} setToken={setToken} />,
+                element: <SigninView token={token} signin={signin} />,
             },
             {
                 path: "/signup",
@@ -39,7 +54,6 @@ const App = () => {
             }
         ]);
     }, [token, setToken])
-
 
   return (
     <div className="App">
@@ -49,7 +63,7 @@ const App = () => {
                 <Flex justify="space-between" align="center" style={{width: "100%"}}>
                     <MenuComponent />
                 </Flex>
-                <MenuUserButton token={token} userEmail={userEmail} />
+                <MenuUserButton token={token} userEmail={userEmail} logout={logout} />
             </Header>
 
             <Content style={{ padding: '0 50px' }}>
