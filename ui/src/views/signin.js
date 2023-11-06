@@ -39,9 +39,8 @@ const SigninView = (props) => {
 
         axios.post("http://localhost:8080/auth/signin", data, opts)
             .then((resp) => {
-                console.log(resp)
                 if (resp.status === 201) {
-                    props.signin(resp.data.token)
+                    props.signin(resp.data.token, resp.data.id)
                 }
 
             })

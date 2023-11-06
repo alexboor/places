@@ -3,7 +3,7 @@ import React from "react";
 const ProfileView = (props) => {
 
     return (
-        <h1>profile</h1>
+        <h1>{props.uid}</h1>
     )
 }
 

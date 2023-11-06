@@ -26,11 +26,14 @@ const parseToken = (t) => {
 
 const App = () => {
     const [token, setToken] = useState(() => localStorage.getItem("token"));
+    const [uid, setUid] = useState(() => localStorage.getItem("uid"));
     const [userEmail, setUserEmail] = useState(() => parseToken(token)["sub"]);
 
-    const signin = (t) => {
+    const signin = (t, uid) => {
         localStorage.setItem("token", t)
+        localStorage.setItem("uid", uid)
         setToken(t)
+        setUid(uid)
         document.location.assign("/")
     }
 
@@ -55,10 +58,10 @@ const App = () => {
             },
             {
                 path: "/profile",
-                element: <ProfileView token={token} email={userEmail} />
+                element: <ProfileView token={token} uid={uid} />
             }
         ]);
-    }, [token, setToken, userEmail])
+    }, [token, setToken, uid])
 
   return (
     <div className="App">
