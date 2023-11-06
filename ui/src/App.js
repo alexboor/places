@@ -7,6 +7,7 @@ import {useMemo, useState} from "react";
 import IndexView from "./views";
 import SigninView from "./views/signin";
 import SignupView from "./views/signup";
+import ProfileView from "./views/profile";
 
 const { Header, Content, Footer } = Layout;
 
@@ -25,7 +26,7 @@ const parseToken = (t) => {
 
 const App = () => {
     const [token, setToken] = useState(() => localStorage.getItem("token"));
-    const [userEmail, setUserEmail] = useState(() => parseToken(token)["sub"])
+    const [userEmail, setUserEmail] = useState(() => parseToken(token)["sub"]);
 
     const signin = (t) => {
         localStorage.setItem("token", t)
@@ -51,9 +52,13 @@ const App = () => {
             {
                 path: "/signup",
                 element: <SignupView token={token} />,
+            },
+            {
+                path: "/profile",
+                element: <ProfileView token={token} email={userEmail} />
             }
         ]);
-    }, [token, setToken])
+    }, [token, setToken, userEmail])
 
   return (
     <div className="App">
