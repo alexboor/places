@@ -5,14 +5,19 @@ import im.sta.places.user.data.UserDto;
 import im.sta.places.user.entity.UserEntity;
 import im.sta.places.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.util.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartFile;
 import org.webjars.NotFoundException;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -70,6 +75,16 @@ public class UserService {
         repo.deleteById(id);
     }
 
+    public void saveAvatar(UUID id, MultipartFile file) throws Exception {
+        var user = findOrThrow(id);
+
+        user.setAvatar(file.getBytes());
+
+    }
+
+
+
+    //////////////
     private UserDto EntityToDto(UserEntity entity) {
         return mapper.map(entity, UserDto.class);
     }

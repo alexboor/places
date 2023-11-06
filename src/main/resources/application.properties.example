@@ -8,3 +8,7 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL10Dialec
 spring.jpa.properties.hibernate.format_sql=true
 
 jwt.secret=h5kn98R3hq5DHZnwy593lBZP9zAjE9lzahzBwejq2L6QoiZ9uRKmUtkn1FIjqwe
+
+spring.servlet.multipart.file-size-threshold=2KB
+spring.servlet.multipart.max-file-size=200MB
+spring.servlet.multipart.max-request-size=215MB
