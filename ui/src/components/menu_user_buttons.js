@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Avatar, Button, Space, Dropdown, Typography, Divider} from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import axios from "axios";
 
 export const MenuUserButton = (props) => {
     const [user, setUser] = useState(() => {
