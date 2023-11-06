@@ -38,6 +38,6 @@ public class AuthenticateController {
         System.out.println(userDetails);
         var jwt = jwtTokenUtil.generateToken(userDetails);
 
-        return new AuthenticationResponse(jwt);
+        return new AuthenticationResponse(jwt, user.getId());
     }
 }
