@@ -57,7 +57,7 @@ const App = () => {
                 element: <SignupView token={token} />,
             },
             {
-                path: "/profile",
+                path: "/profile/*",
                 element: <ProfileView token={token} uid={uid} />
             }
         ]);
