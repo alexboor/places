@@ -68,7 +68,7 @@ const styles = {
     },
     right: {
         height: "100%",
-        backgroud: "#fff"
+        background: "#fff"
     }
 }
 
