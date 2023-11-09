@@ -16,8 +16,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -79,6 +77,8 @@ public class UserService {
         var user = findOrThrow(id);
 
         user.setAvatar(file.getBytes());
+
+        repo.save(user);
 
     }
 

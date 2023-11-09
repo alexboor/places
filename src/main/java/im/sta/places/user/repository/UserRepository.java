@@ -4,6 +4,7 @@ import im.sta.places.user.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -14,4 +15,5 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     Boolean selectExistEmail(String email);
 
     UserEntity findByEmail(String email);
+
 }

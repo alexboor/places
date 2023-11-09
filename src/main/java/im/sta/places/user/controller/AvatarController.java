@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.UUID;
 
 @RestController
@@ -19,13 +22,11 @@ public class AvatarController {
     private final UserService userService;
 
     @PostMapping("/test/api/user/{id}/avatar")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void postAvatar(@PathVariable("id") UUID id, @RequestParam("file")MultipartFile file)
-    throws Exception {
-
+    public String postAvatar(@PathVariable("id") UUID id, @RequestParam("file")MultipartFile file, RedirectAttributes redirectAttributes) throws Exception {
         userService.saveAvatar(id, file);
 
-        //TODO: find or throw
+        redirectAttributes.addFlashAttribute("message", "Successfully uploaded" + file.getOriginalFilename() + " !");
 
+        return "redirect:/";
     }
 }
