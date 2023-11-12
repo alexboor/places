@@ -17,7 +17,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/api/v1/users/{id}")
+    @GetMapping("/api/v1/users/{id}/")
     public UserDto getUserById(@PathVariable("id") UUID id) {
         return userService.findUserById(id);
     }

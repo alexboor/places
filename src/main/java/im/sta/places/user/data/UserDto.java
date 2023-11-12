@@ -14,5 +14,6 @@ public class UserDto {
     private UUID id;
     private String email;
     private String name;
+    private Boolean activated;
     private String password;
 }
