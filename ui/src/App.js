@@ -50,7 +50,7 @@ const App = () => {
             },
             {
                 path: "/signin",
-                element: <SigninView token={token} signin={signin} />,
+                element: <SigninView token={token} uid={uid} signin={signin} />,
             },
             {
                 path: "/signup",

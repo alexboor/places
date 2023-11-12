@@ -45,7 +45,7 @@ const ProfileView = (props) => {
             </Col>
             <Col flex="auto" style={styles.right}>
                 <Routes>
-                    <Route path="" element={<ProfileUserDetailsForm />} />
+                    <Route path="" element={<ProfileUserDetailsForm token={props.token} uid={props.uid} />} />
                     <Route path="favorites" element={<ProfileFavorites />} />
                     <Route path="settings" element={<ProfileSettings />} />
                 </Routes>

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {Row, Col, Avatar, Tag, Modal} from "antd";
-import { UserOutlined, EditOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { UserOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import {UserProfileModalNameForm} from "./modal_name";
+import axios from "axios";
 
 
 export const ProfileUserDetailsForm = (props) => {
@@ -12,6 +13,26 @@ export const ProfileUserDetailsForm = (props) => {
 
     const [modalEmailOpen, setModalEmailOpen] = useState(false)
     const [modalPassOpen, setModalPassOpen] = useState(false)
+
+    const [user, setUser] = useState({})
+
+    const init = useRef(false)
+    useEffect(() => {
+        if (!init.current) {
+            init.current = true
+
+            axios.get(`http://localhost:8080/api/v1/users/${props.uid}/`, {
+                headers: {
+                    'Authorization': `Bearer ${props.token}`
+                }
+            }).then((resp) => {
+                setUser(resp.data)
+            }).catch((err) => {
+                console.log(err)
+            })
+        
+        }
+    }, [])
 
     const handleModalAvatarOpen = () => {
         setModalAvatarOpen(true);
@@ -75,23 +96,25 @@ export const ProfileUserDetailsForm = (props) => {
                     </a>
                 </Col>
                 <Col>
-                    <h1>user name <small><a href="#" onClick={handleModalNameOpen}><EditOutlined /></a></small></h1>
+                    <h1>{user.name} <small><a href="#" onClick={handleModalNameOpen}><EditOutlined /></a></small></h1>
                 </Col>
             </Row>
             <Row>
                 <Col span={4} style={styles.colLeft}>ID:</Col>
-                <Col style={styles.colRight}>123-123-123-2311</Col>
+                <Col style={styles.colRight}>{user.id}</Col>
             </Row>
             <Row>
                 <Col span={4} style={styles.colLeft}>Email:</Col>
-                <Col style={styles.colRight}>mail@sta.im <a href="#" onClick={handleModalEmailOpen}><EditOutlined /></a></Col>
+                <Col style={styles.colRight}>{user.email} <a href="#" onClick={handleModalEmailOpen}><EditOutlined /></a></Col>
             </Row>
             <Row>
                 <Col span={4} style={styles.colLeft}>Status:</Col>
                 <Col style={styles.colRight}>
-                    <Tag icon={<CheckCircleOutlined />} color="success">
-                        success
-                    </Tag>
+                    {user.activated ? 
+                        <Tag icon={<CheckCircleOutlined />} color="success">Active</Tag> :
+                        <Tag icon={<CloseCircleOutlined />} color="error">Not activated</Tag>
+                    }
+                    
                 </Col>
             </Row>
             <Row>
