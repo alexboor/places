@@ -42,6 +42,11 @@ const App = () => {
         document.location.assign("/signin")
     }
 
+    const globalActions = {
+        logout: logout
+        
+    }
+
     const router = useMemo(() => {
         return createBrowserRouter([
             {
@@ -58,7 +63,7 @@ const App = () => {
             },
             {
                 path: "/profile/*",
-                element: <ProfileView token={token} uid={uid} />
+                element: <ProfileView token={token} uid={uid} globalActions={globalActions} />
             }
         ]);
     }, [token, setToken, uid])

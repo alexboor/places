@@ -28,11 +28,13 @@ export const ProfileUserDetailsForm = (props) => {
             }).then((resp) => {
                 setUser(resp.data)
             }).catch((err) => {
-                console.log(err)
+                if (err.response.status === 403) {
+                    props.globalActions.logout()
+                }
             })
         
         }
-    }, [])
+    }, [props])
 
     const handleModalAvatarOpen = () => {
         setModalAvatarOpen(true);
