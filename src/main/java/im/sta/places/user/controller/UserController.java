@@ -22,10 +22,10 @@ public class UserController {
         return userService.findUserById(id);
     }
 
-    @PutMapping("/api/v1/users/{id}")
-    public void putUser(@PathVariable("id") UUID id, @Valid @RequestBody UserDto userDto)
+    @PutMapping("/api/v1/users/{id}/")
+    public UserDto putUser(@PathVariable("id") UUID id, @Valid @RequestBody UserDto userDto)
     throws NoSuchAlgorithmException {
-        userService.updateUser(id, userDto, userDto.getPassword());
+        return userService.updateUser(id, userDto, userDto.getPassword());
     }
 
 //    @CrossOrigin(origins = "http://localhost:3000")

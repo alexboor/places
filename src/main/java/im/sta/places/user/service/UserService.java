@@ -5,7 +5,7 @@ import im.sta.places.user.data.UserDto;
 import im.sta.places.user.entity.UserEntity;
 import im.sta.places.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
@@ -52,20 +52,28 @@ public class UserService {
         return EntityToDto(user);
     }
 
-    public void updateUser(UUID id, UserDto userDto, String pass) throws NoSuchAlgorithmException {
+    public UserDto updateUser(UUID id, UserDto userDto, String pass) throws NoSuchAlgorithmException {
         var user = findOrThrow(id);
         var userParam = DtoToEntity(userDto);
 
-        user.setEmail(userParam.getEmail());
-        user.setName(userParam.getName());
+        if (!StringUtils.isBlank(userParam.getEmail())) {
+            user.setEmail(userParam.getEmail());
+        }
 
-        if (!pass.isBlank()) {
+        if (!StringUtils.isBlank(userParam.getName())) {
+            user.setName(userParam.getName());
+        }
+
+        if (!StringUtils.isBlank(pass)) {
             byte[] salt = createSalt();
             byte[] hashedPassword = createPasswordHash(pass, salt);
 
             user.setStoredSalt(salt);
             user.setStoredHash(hashedPassword);
         }
+
+        repo.save(user);
+        return EntityToDto(user);
     }
 
     public void removeUserById(UUID id) {
