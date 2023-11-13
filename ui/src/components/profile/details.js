@@ -4,12 +4,13 @@ import { UserOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } 
 import {UserProfileModalNameForm} from "./modal_name";
 import axios from "axios";
 
+const API_URL_BASE = "http://localhost:8080/api/v1"
 
 export const ProfileUserDetailsForm = (props) => {
     const [modalAvatarOpen, setModalAvatarOpen] = useState(false)
 
     const [modalNameOpen, setModalNameOpen] = useState(false)
-    const [name, setName] = useState()
+    const [modalNameLoading, setModalNameLoading] = useState(false)
 
     const [modalEmailOpen, setModalEmailOpen] = useState(false)
     const [modalPassOpen, setModalPassOpen] = useState(false)
@@ -55,8 +56,30 @@ export const ProfileUserDetailsForm = (props) => {
     }
 
     const handleModalNameOk = () => {
-        console.log(name)
-        setModalNameOpen(false)
+        setModalNameLoading(true)
+
+        axios({
+            url: `${API_URL_BASE}/users/${props.uid}/`,
+            method: 'put',
+            data: {name: user.name},
+            headers: {
+                "Authorization": `Bearer ${props.token}`,
+                "Content-Type": "application/json",
+            }
+        }).then((resp) => {
+            setUser({
+                ...user,
+                name: resp.data.name,
+            })
+        }).catch((err) => {
+            console.log("err", err)
+        }).finally(() => {
+            setModalNameLoading(false)
+            setModalNameOpen(false)
+        })
+
+
+        
     }
 
     const handleModalNameCancel = () => {
@@ -128,8 +151,8 @@ export const ProfileUserDetailsForm = (props) => {
                 <UserProfileModalNameForm />
             </Modal>
 
-            <Modal title="Setup new name" open={modalNameOpen} onOk={handleModalNameOk} onCancel={handleModalNameCancel} confirmLoading={false}>
-                <UserProfileModalNameForm onFinish={handleModalNameOk} setName={setName} />
+            <Modal title="Setup new name" open={modalNameOpen} onOk={handleModalNameOk} onCancel={handleModalNameCancel} confirmLoading={modalNameLoading}>
+                <UserProfileModalNameForm onFinish={handleModalNameOk} setUser={setUser} user={user} />
             </Modal>
 
             <Modal title="Setup new email" open={modalEmailOpen} onOk={handleModalEmailOk} onCancel={handleModalEmailCancel} confirmLoading={false}>
