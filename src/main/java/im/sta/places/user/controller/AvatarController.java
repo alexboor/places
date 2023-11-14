@@ -21,8 +21,8 @@ public class AvatarController {
 
     private final UserService userService;
 
-    @PostMapping("/test/api/user/{id}/avatar")
-    public String postAvatar(@PathVariable("id") UUID id, @RequestParam("file")MultipartFile file, RedirectAttributes redirectAttributes) throws Exception {
+    @PostMapping("/api/v1/users/{id}/avatar/")
+    public String postAvatar(@PathVariable("id") UUID id, @RequestParam("avatar")MultipartFile file, RedirectAttributes redirectAttributes) throws Exception {
         userService.saveAvatar(id, file);
 
         redirectAttributes.addFlashAttribute("message", "Successfully uploaded" + file.getOriginalFilename() + " !");
