@@ -1,13 +1,50 @@
 import React, { useEffect, useRef, useState } from "react";
-import {Row, Col, Avatar, Tag, Modal} from "antd";
-import { UserOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import {Row, Col, Avatar, Tag, Modal, Upload} from "antd";
+import { UserOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import ImgCrop from "antd-img-crop";
 import {UserProfileModalNameForm} from "./modal_name";
 import axios from "axios";
 
 const API_URL_BASE = "http://localhost:8080/api/v1"
 
+/**
+ * Read base64 from given file
+ * @param img
+ * @param callback
+ */
+const getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result))
+    reader.readAsDataURL(img)
+}
+
+/**
+ * Callback before upload on the avatar upload component
+ * @param file
+ */
+const beforeUpload = (file) => {
+    console.log("before upload")
+}
+
+const avatarChange = () => {
+    console.log("change")
+}
+
+const avatarPreview = () => {
+    console.logI("preview")
+}
+
+/**
+ * Main user detail component shows on /profile address
+ *
+ * @param props
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const ProfileUserDetailsForm = (props) => {
     const [modalAvatarOpen, setModalAvatarOpen] = useState(false)
+    const [avatarLoading, setAvatarLoading] = useState()
+    const [avatarImgUrl, setAvatarImgUrl] = useState()
 
     const [modalNameOpen, setModalNameOpen] = useState(false)
     const [modalNameLoading, setModalNameLoading] = useState(false)
@@ -110,15 +147,46 @@ export const ProfileUserDetailsForm = (props) => {
         setModalPassOpen(false)
     }
 
+    const uploadButton = (
+        <div>
+            {avatarLoading ? <LoadingOutlined /> : <PlusOutlined />}
+            <div style={{marginTop: 8}}>
+                Upload
+            </div>
+        </div>
+    );
 
     return (
         <div style={styles.container} >
             <Row justify="start" align="middle">
                 <Col style={styles.avatarCol} >
-                    <a href="#" onClick={handleModalAvatarOpen}>
-                        <Avatar size={100} icon={<UserOutlined />} /><br/>
-                        Change
-                    </a>
+                    {/*<a href="#" onClick={handleModalAvatarOpen}>*/}
+                    {/*    <Avatar size={100} icon={<UserOutlined />} /><br/>*/}
+                    {/*    Change*/}
+                    {/*</a>*/}
+                    <ImgCrop rotationSlider showReset cropShape="round">
+                        <Upload
+                            name="avatar"
+                            listType="picture-circle"
+                            className="avatar-uploader"
+                            showUploadList={false}
+                            action={`${API_URL_BASE}/users/${props.uid}/avatar/`}
+                            headers={{'Authorization': `Bearer ${props.token}`}}
+                            beforeUpload={beforeUpload}
+                            onChange={avatarChange}
+                            onPreview={avatarPreview}
+                        >
+                            {false ?
+                                <img
+                                    src={avatarImgUrl}
+                                    alt="avatar"
+                                    style={{
+                                        width: '100%',
+                                    }}
+                                /> : uploadButton
+                            }
+                        </Upload>
+                    </ImgCrop>
                 </Col>
                 <Col>
                     <h1>{user.name} <small><a href="#" onClick={handleModalNameOpen}><EditOutlined /></a></small></h1>
