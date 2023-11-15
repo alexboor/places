@@ -62,6 +62,7 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/test/**").permitAll()
+                .requestMatchers("/content/**").permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -1,17 +1,13 @@
 package im.sta.places.user.controller;
 
-import im.sta.places.user.data.AvatarResponse;
-import im.sta.places.user.entity.UserEntity;
 import im.sta.places.user.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
-import java.util.Arrays;
+import java.awt.*;
 import java.util.UUID;
 
 @RestController
@@ -28,5 +24,13 @@ public class AvatarController {
         redirectAttributes.addFlashAttribute("message", "Successfully uploaded" + file.getOriginalFilename() + " !");
 
         return "redirect:/";
+    }
+
+    @GetMapping(
+            value = "/content/avatar/{id}/",
+            produces = MediaType.IMAGE_JPEG_VALUE
+    )
+    public @ResponseBody byte[] getAvatar(@PathVariable("id") UUID id) throws Exception {
+        return userService.getAvatar(id);
     }
 }
