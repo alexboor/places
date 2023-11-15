@@ -83,11 +83,12 @@ public class UserService {
 
     public void saveAvatar(UUID id, MultipartFile file) throws Exception {
         var user = findOrThrow(id);
-
         user.setAvatar(file.getBytes());
-
         repo.save(user);
+    }
 
+    public byte[] getAvatar(UUID id) throws Exception {
+        return repo.getAvatar(id);
     }
 
 

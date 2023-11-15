@@ -14,6 +14,9 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     @Query("SELECT CASE WHEN COUNT(u) > 0 THEN TRUE ELSE FALSE END FROM UserEntity u WHERE u.email = ?1")
     Boolean selectExistEmail(String email);
 
+    @Query("SELECT u.avatar FROM UserEntity u WHERE u.id = ?1")
+    byte[] getAvatar(UUID id);
+
     UserEntity findByEmail(String email);
 
 }
