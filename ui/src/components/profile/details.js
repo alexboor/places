@@ -6,6 +6,7 @@ import {UserProfileModalNameForm} from "./modal_name";
 import axios from "axios";
 
 const API_URL_BASE = "http://localhost:8080/api/v1"
+const CONTENT_URL_BASE = "http://localhost:8080/content"
 
 /**
  * Read base64 from given file
@@ -44,7 +45,8 @@ const avatarPreview = () => {
 export const ProfileUserDetailsForm = (props) => {
     const [modalAvatarOpen, setModalAvatarOpen] = useState(false)
     const [avatarLoading, setAvatarLoading] = useState()
-    const [avatarImgUrl, setAvatarImgUrl] = useState()
+    const [avatarImgUrl, setAvatarImgUrl] = useState(`${CONTENT_URL_BASE}/avatar/${props.uid}/`)
+    const [avatarFileList, setAvatarFileList] = useState()
 
     const [modalNameOpen, setModalNameOpen] = useState(false)
     const [modalNameLoading, setModalNameLoading] = useState(false)
@@ -59,17 +61,23 @@ export const ProfileUserDetailsForm = (props) => {
         if (!init.current) {
             init.current = true
 
-            axios.get(`http://localhost:8080/api/v1/users/${props.uid}/`, {
+            const opts = {
                 headers: {
                     'Authorization': `Bearer ${props.token}`
                 }
-            }).then((resp) => {
-                setUser(resp.data)
+            }
+
+            axios.get(`${API_URL_BASE}/users/${props.uid}/`, opts).then((resp) => {
+                    setUser(resp.data)
             }).catch((err) => {
                 if (err.response.status === 403) {
                     props.globalActions.logout()
                 }
             })
+
+            // axios.get(`${API_URL_BASE}/users/${props.uid}/avatar/`, opts).then((resp) => {
+            //     setAvatarImgUrl()
+            // }).catch((err) => console.log(err))
         
         }
     }, [props])
@@ -168,22 +176,21 @@ export const ProfileUserDetailsForm = (props) => {
                         <Upload
                             name="avatar"
                             listType="picture-circle"
-                            className="avatar-uploader"
                             showUploadList={false}
+                            fileList={avatarFileList}
                             action={`${API_URL_BASE}/users/${props.uid}/avatar/`}
                             headers={{'Authorization': `Bearer ${props.token}`}}
-                            beforeUpload={beforeUpload}
+                            // beforeUpload={beforeUpload}
                             onChange={avatarChange}
-                            onPreview={avatarPreview}
+                            // onPreview={avatarPreview}
+                            maxCount="1"
                         >
-                            {false ?
-                                <img
-                                    src={avatarImgUrl}
-                                    alt="avatar"
-                                    style={{
-                                        width: '100%',
-                                    }}
-                                /> : uploadButton
+                            {avatarImgUrl ?
+                                <Avatar size={100}
+                                        icon={<UserOutlined />}
+                                        src={avatarImgUrl}
+                                />
+                                : uploadButton
                             }
                         </Upload>
                     </ImgCrop>
