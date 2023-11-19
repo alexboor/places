@@ -19,17 +19,6 @@ const getBase64 = (img, callback) => {
     reader.readAsDataURL(img)
 }
 
-/**
- * Callback before upload on the avatar upload component
- * @param file
- */
-const beforeUpload = (file) => {
-    console.log("before upload")
-}
-
-const avatarChange = () => {
-    console.log("change")
-}
 
 const avatarPreview = () => {
     console.logI("preview")
@@ -46,7 +35,14 @@ export const ProfileUserDetailsForm = (props) => {
     const [modalAvatarOpen, setModalAvatarOpen] = useState(false)
     const [avatarLoading, setAvatarLoading] = useState()
     const [avatarImgUrl, setAvatarImgUrl] = useState(`${CONTENT_URL_BASE}/avatar/${props.uid}/`)
-    const [avatarFileList, setAvatarFileList] = useState()
+    const [avatarFileList, setAvatarFileList] = useState([
+        {
+            uid: '-1',
+            name: 'avatar.jpg',
+            status: 'done',
+            url: `${CONTENT_URL_BASE}/avatar/${props.uid}/`,
+        }
+    ])
 
     const [modalNameOpen, setModalNameOpen] = useState(false)
     const [modalNameLoading, setModalNameLoading] = useState(false)
@@ -82,8 +78,28 @@ export const ProfileUserDetailsForm = (props) => {
         }
     }, [props])
 
-    const handleModalAvatarOpen = () => {
-        setModalAvatarOpen(true);
+    const beforeUpload = (file) => {
+
+    }
+
+    const avatarChange = ({fileList: newFileList}) => {
+        setAvatarFileList(newFileList)
+        // if (info === undefined) {
+        //     setAvatarImgUrl(`${CONTENT_URL_BASE}/avatar/${props.uid}/?t=${Date.now()}`)
+        // } else {
+        //     if (info.file.status === "uploading") {
+        //         console.log("uploading")
+        //         setAvatarLoading(true)
+        //         setAvatarImgUrl(null)
+        //     }
+        //     if (info.file.status === "done") {
+        //         console.log("done")
+        //         setAvatarLoading(false)
+        //         setAvatarImgUrl(`${CONTENT_URL_BASE}/avatar/${props.uid}/?t=${Date.now()}`)
+        //         // setAvatarFileList(null)
+        //     }
+        // }
+
     }
 
     const handleModalAvatarOk = () => {
@@ -159,7 +175,7 @@ export const ProfileUserDetailsForm = (props) => {
         <div>
             {avatarLoading ? <LoadingOutlined /> : <PlusOutlined />}
             <div style={{marginTop: 8}}>
-                Upload
+                {avatarLoading ? "Uploading" : "Upload"}
             </div>
         </div>
     );
@@ -172,7 +188,7 @@ export const ProfileUserDetailsForm = (props) => {
                     {/*    <Avatar size={100} icon={<UserOutlined />} /><br/>*/}
                     {/*    Change*/}
                     {/*</a>*/}
-                    <ImgCrop rotationSlider showReset cropShape="round">
+                    <ImgCrop rotationSlider showReset cropShape="round" onModalOk={avatarChange}>
                         <Upload
                             name="avatar"
                             listType="picture-circle"
@@ -180,18 +196,18 @@ export const ProfileUserDetailsForm = (props) => {
                             fileList={avatarFileList}
                             action={`${API_URL_BASE}/users/${props.uid}/avatar/`}
                             headers={{'Authorization': `Bearer ${props.token}`}}
-                            // beforeUpload={beforeUpload}
+                            beforeUpload={beforeUpload}
                             onChange={avatarChange}
                             // onPreview={avatarPreview}
                             maxCount="1"
-                        >
-                            {avatarImgUrl ?
-                                <Avatar size={100}
-                                        icon={<UserOutlined />}
-                                        src={avatarImgUrl}
-                                />
-                                : uploadButton
-                            }
+                        > {true}
+                            {/*{avatarImgUrl ?*/}
+                            {/*    <Avatar size={100}*/}
+                            {/*            icon={<UserOutlined />}*/}
+                            {/*            src={avatarImgUrl}*/}
+                            {/*    />*/}
+                            {/*    : uploadButton*/}
+                            {/*}*/}
                         </Upload>
                     </ImgCrop>
                 </Col>
