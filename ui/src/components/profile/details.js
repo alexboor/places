@@ -35,14 +35,6 @@ export const ProfileUserDetailsForm = (props) => {
     const [modalAvatarOpen, setModalAvatarOpen] = useState(false)
     const [avatarLoading, setAvatarLoading] = useState()
     const [avatarImgUrl, setAvatarImgUrl] = useState(`${CONTENT_URL_BASE}/avatar/${props.uid}/`)
-    const [avatarFileList, setAvatarFileList] = useState([
-        {
-            uid: '-1',
-            name: 'avatar.jpg',
-            status: 'done',
-            url: `${CONTENT_URL_BASE}/avatar/${props.uid}/`,
-        }
-    ])
 
     const [modalNameOpen, setModalNameOpen] = useState(false)
     const [modalNameLoading, setModalNameLoading] = useState(false)
@@ -57,49 +49,48 @@ export const ProfileUserDetailsForm = (props) => {
         if (!init.current) {
             init.current = true
 
-            const opts = {
-                headers: {
-                    'Authorization': `Bearer ${props.token}`
-                }
-            }
-
-            axios.get(`${API_URL_BASE}/users/${props.uid}/`, opts).then((resp) => {
-                    setUser(resp.data)
-            }).catch((err) => {
-                if (err.response.status === 403) {
-                    props.globalActions.logout()
-                }
-            })
-
-            // axios.get(`${API_URL_BASE}/users/${props.uid}/avatar/`, opts).then((resp) => {
-            //     setAvatarImgUrl()
-            // }).catch((err) => console.log(err))
-        
+            getUserData(props)
         }
     }, [props])
+
+    const getUserData = (props) => {
+        const opts = {
+            headers: {
+                'Authorization': `Bearer ${props.token}`
+            }
+        }
+
+        axios.get(`${API_URL_BASE}/users/${props.uid}/`, opts).then((resp) => {
+                setUser(resp.data)
+        }).catch((err) => {
+            if (err.response.status === 403) {
+                props.globalActions.logout()
+            }
+        })
+    }
 
     const beforeUpload = (file) => {
 
     }
 
-    const avatarChange = ({fileList: newFileList}) => {
-        setAvatarFileList(newFileList)
-        // if (info === undefined) {
-        //     setAvatarImgUrl(`${CONTENT_URL_BASE}/avatar/${props.uid}/?t=${Date.now()}`)
-        // } else {
-        //     if (info.file.status === "uploading") {
-        //         console.log("uploading")
-        //         setAvatarLoading(true)
-        //         setAvatarImgUrl(null)
-        //     }
-        //     if (info.file.status === "done") {
-        //         console.log("done")
-        //         setAvatarLoading(false)
-        //         setAvatarImgUrl(`${CONTENT_URL_BASE}/avatar/${props.uid}/?t=${Date.now()}`)
-        //         // setAvatarFileList(null)
-        //     }
-        // }
+    const avatarUpload = ({file, onProgress}) => {
+        setAvatarLoading(true)
+        setAvatarImgUrl(null)
+        const frmData = new FormData()
+        const opts = {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                "Authorization": `Bearer ${props.token}`
+            },
+        }
+        frmData.append("avatar", file)
 
+        axios.post(`${API_URL_BASE}/users/${props.uid}/avatar/`, frmData, opts).then((resp) => {
+            setAvatarImgUrl(`${CONTENT_URL_BASE}/avatar/${props.uid}/?t=${Date.now()}`)
+            setAvatarLoading(true)
+        }).catch((err) => {
+            console.log("err", err)
+        })
     }
 
     const handleModalAvatarOk = () => {
@@ -184,30 +175,21 @@ export const ProfileUserDetailsForm = (props) => {
         <div style={styles.container} >
             <Row justify="start" align="middle">
                 <Col style={styles.avatarCol} >
-                    {/*<a href="#" onClick={handleModalAvatarOpen}>*/}
-                    {/*    <Avatar size={100} icon={<UserOutlined />} /><br/>*/}
-                    {/*    Change*/}
-                    {/*</a>*/}
-                    <ImgCrop rotationSlider showReset cropShape="round" onModalOk={avatarChange}>
+                    <ImgCrop rotationSlider showReset cropShape="round">
                         <Upload
                             name="avatar"
                             listType="picture-circle"
                             showUploadList={false}
-                            fileList={avatarFileList}
-                            action={`${API_URL_BASE}/users/${props.uid}/avatar/`}
-                            headers={{'Authorization': `Bearer ${props.token}`}}
-                            beforeUpload={beforeUpload}
-                            onChange={avatarChange}
-                            // onPreview={avatarPreview}
+                            customRequest={avatarUpload}
                             maxCount="1"
-                        > {true}
-                            {/*{avatarImgUrl ?*/}
-                            {/*    <Avatar size={100}*/}
-                            {/*            icon={<UserOutlined />}*/}
-                            {/*            src={avatarImgUrl}*/}
-                            {/*    />*/}
-                            {/*    : uploadButton*/}
-                            {/*}*/}
+                        > 
+                        {avatarImgUrl ?
+                                <Avatar size={100}
+                                        icon={<UserOutlined />}
+                                        src={avatarImgUrl}
+                                />
+                                : uploadButton
+                            }
                         </Upload>
                     </ImgCrop>
                 </Col>
